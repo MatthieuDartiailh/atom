@@ -27,6 +27,9 @@
 #define Py23Int_AsSsize_t PyLong_AsSsize_t
 #define Py23Int_FromSsize_t PyLong_FromSsize_t
 
+#define INITERROR return NULL
+#define MOD_INIT(name) PyMODINIT_FUNC PyInit_##name(void)
+
 #else
 
 #define Py23Str_Check PyString_Check
@@ -44,5 +47,8 @@
 #define Py23Number_Int PyNumber_Int
 #define Py23Int_AsSsize_t PyInt_AsSsize_t
 #define Py23Int_FromSsize_t PyInt_FromSsize_t
+
+#define INITERROR return
+#define MOD_INIT(name) PyMODINIT_FUNC init##name(void)
 
 #endif

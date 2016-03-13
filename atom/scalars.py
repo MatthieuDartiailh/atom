@@ -180,6 +180,7 @@ class Float(Value):
 
 class Bytes(Value):
     """ A value of type `bytes`.
+
     """
     __slots__ = ()
 
@@ -209,7 +210,7 @@ class Str(Value):
 
 
 class Unicode(Value):
-    """ A value of type `str`.
+    """ A value of type `unicode`.
 
     By default, plain strings will be promoted to unicode strings. Pass
     strict=True to the constructor to enable strict unicode checking.

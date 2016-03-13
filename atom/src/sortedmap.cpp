@@ -605,14 +605,6 @@ static struct PyModuleDef moduledef = {
         NULL
 };
 
-#define INITERROR return NULL
-#define MOD_INIT(name) PyMODINIT_FUNC PyInit_##name(void)
-
-#else
-
-#define INITERROR return
-#define MOD_INIT(name) PyMODINIT_FUNC init##name(void)
-
 #endif
 
 MOD_INIT( sortedmap )

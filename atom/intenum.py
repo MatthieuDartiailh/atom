@@ -125,7 +125,7 @@ class _IntEnumMeta(type):
         enums = {}
         reved = {}
         cls = type.__new__(meta, name, bases, dct)
-        for key, value in list(cls.__dict__.items()):
+        for key, value in cls.__dict__.items():
             if isinstance(value, int):
                 enum = int.__new__(cls, value)
                 enum.__enum_name__ = key
@@ -161,7 +161,7 @@ class _IntEnumMeta(type):
         return len(cls.__enums__)
 
     def __iter__(cls):
-        return iter(list(cls.__enums__.values()))
+        return iter(cls.__enums__.values())
 
     def __setattr__(cls, name, value):
         if name in cls.__enums__:

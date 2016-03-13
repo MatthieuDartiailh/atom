@@ -14,9 +14,9 @@
 #include "signalconnector.h"
 #include "atomref.h"
 #include "atomlist.h"
-//#include "atomdict.h"
 #include "enumtypes.h"
 #include "propertyhelper.h"
+#include "py23compat.h"
 
 using namespace PythonHelpers;
 
@@ -41,14 +41,6 @@ static struct PyModuleDef moduledef = {
         NULL,
         NULL
 };
-
-#define INITERROR return NULL
-#define MOD_INIT(name) PyMODINIT_FUNC PyInit_##name(void)
-
-#else
-
-#define INITERROR return
-#define MOD_INIT(name) PyMODINIT_FUNC init##name(void)
 
 #endif
 
