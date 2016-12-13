@@ -117,8 +117,10 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
     atom->set_slot( member->index, newptr.get() );
     if( member->get_post_setattr_mode() )
     {
-        if( member->post_setattr( atom, oldptr.get(), newptr.get() ) < 0 )
+        if( member->post_setattr( atom, oldptr.get(), newptr.get() ) < 0 ){
+            printf("Fail at post_setattr");
             return -1;
+            }
     }
     if( ( !valid_old || oldptr != newptr ) && atom->get_notifications_enabled() )
     {
@@ -133,8 +135,10 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
                 argsptr = created_args( atom, member, newptr.get() );
             if( !argsptr )
                 return -1;
-            if( !member->notify( atom, argsptr.get(), 0 ) )
+            if( !member->notify( atom, argsptr.get(), 0 ) ){
+                printf("Fail at notify (because of static)\n");
                 return -1;
+                }
         }
         if( atom->has_observers( member->name ) )
         {
@@ -149,8 +153,16 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
                 if( !argsptr )
                     return -1;
             }
-            if( !atom->notify( member->name, argsptr.get(), 0 ) )
+            if( !atom->notify( member->name, argsptr.get(), 0 ) ){
+                printf("MemberSetattrBehavior: Fail at notify (because of dynamic)");
+                if( PyErr_Occurred() ){
+                    printf(": Python exception set\n");
+                }
+                else{
+                     printf(": Python exception not set\n");
+                }
                 return -1;
+                }
         }
     }
     return 0;

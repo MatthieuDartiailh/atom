@@ -219,8 +219,20 @@ ObserverPool::notify( PyObjectPtr& topic, PyObjectPtr& args, PyObjectPtr& kwargs
             {
                 if( obs_it->is_true() )
                 {
-                    if( !obs_it->operator()( args, kwargs ) )
+                    if( !obs_it->operator()( args, kwargs ) ){
+                        printf("Fail at ObserverPool.notify");
+                        if( PyErr_Occurred() ){
+                            printf(": Python exception set\n");
+                            PyObject *type, *value, *traceback;
+                            PyErr_Fetch(&type, &value, &traceback);
+                            PyErr_SetString(PyExc_RuntimeError, "Failed to pass previous ex");
+                        }
+                        else{
+                             printf(": Python exception not set\n");
+                        }
+
                         return false;
+                        }
                 }
                 else
                 {
