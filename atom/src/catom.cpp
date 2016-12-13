@@ -493,9 +493,6 @@ CAtom::notify( PyObject* topic, PyObject* args, PyObject* kwargs )
         PyObjectPtr argsptr( newref( args ) );
         PyObjectPtr kwargsptr( xnewref( kwargs ) );
         int resp = observers->notify( topicptr, argsptr, kwargsptr );
-        if( PyErr_Occurred() ){
-                printf("CAtom exception before if\n");
-            }
         if( !resp ){
             printf("CAtom: Fail at dynamic notifier");
             if( PyErr_Occurred() ){

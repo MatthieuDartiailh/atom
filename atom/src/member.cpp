@@ -1076,8 +1076,16 @@ Member::notify( CAtom* atom, PyObject* args, PyObject* kwargs )
             {
                 callable = *it;
             }
-            if( !callable( argsptr, kwargsptr ) )
+            if( !callable( argsptr, kwargsptr ) ){
+                printf("Member: Fail at static notifier");
+                if( PyErr_Occurred() ){
+                    printf(": Python exception set\n");
+                }
+                else{
+                     printf(": Python exception not set\n");
+                }
                 return false;
+                }
         }
     }
     return true;

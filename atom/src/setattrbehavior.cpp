@@ -118,7 +118,7 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
     if( member->get_post_setattr_mode() )
     {
         if( member->post_setattr( atom, oldptr.get(), newptr.get() ) < 0 ){
-            printf("Fail at post_setattr");
+            printf("SetAttr.SlotHandler: Fail at post_setattr\n");
             return -1;
             }
     }
@@ -136,7 +136,13 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
             if( !argsptr )
                 return -1;
             if( !member->notify( atom, argsptr.get(), 0 ) ){
-                printf("Fail at notify (because of static)\n");
+                printf("SetAttr.SlotHandler: Fail at notify (because of static)");
+                if( PyErr_Occurred() ){
+                    printf(": Python exception set\n");
+                }
+                else{
+                     printf(": Python exception not set\n");
+                }
                 return -1;
                 }
         }
@@ -154,7 +160,7 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
                     return -1;
             }
             if( !atom->notify( member->name, argsptr.get(), 0 ) ){
-                printf("MemberSetattrBehavior: Fail at notify (because of dynamic)");
+                printf("SetAttr.SlotHandler: : Fail at notify (because of dynamic)");
                 if( PyErr_Occurred() ){
                     printf(": Python exception set\n");
                 }
