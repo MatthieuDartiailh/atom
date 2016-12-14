@@ -13,6 +13,7 @@
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 #endif
 
+#include <cstdio>
 #include "member.h"
 #include "enumtypes.h"
 #include "packagenaming.h"
@@ -746,6 +747,9 @@ Member__get__( Member* self, PyObject* object, PyObject* type )
 static int
 Member__set__( Member* self, PyObject* object, PyObject* value )
 {
+    printf("Setting member ");
+    PyObject_Print(self->name, stdout, Py_PRINT_RAW);
+    printf("\n");
     if( !CAtom::TypeCheck( object ) )
     {
         py_expected_type_fail( object, "CAtom" );
@@ -1077,7 +1081,9 @@ Member::notify( CAtom* atom, PyObject* args, PyObject* kwargs )
                 callable = *it;
             }
             if( !callable( argsptr, kwargsptr ) ){
-                printf("Member: Fail at static notifier");
+                printf("Member ");
+                PyObject_Print(this->name, stdout, Py_PRINT_RAW);
+                printf(" : Fail at static notifier");
                 if( PyErr_Occurred() ){
                     printf(": Python exception set\n");
                 }
