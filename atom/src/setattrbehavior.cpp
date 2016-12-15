@@ -8,6 +8,7 @@
 #include "member.h"
 #include "memberchange.h"
 #include "py23compat.h"
+#include <cstdio>
 
 
 using namespace PythonHelpers;
@@ -114,6 +115,11 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
     newptr = member->full_validate( atom, oldptr.get(), newptr.get() );
     if( !newptr )
         return -1;
+    printf("SlotHandler for ");
+    PyObject_Print(member->name, stdout, Py_PRINT_RAW);
+    printf(" of ");
+    PyObject_Print(pyobject_cast( atom ), stdout, Py_PRINT_RAW);
+    printf(":setting slot\n");
     atom->set_slot( member->index, newptr.get() );
     if( member->get_post_setattr_mode() )
     {
@@ -127,6 +133,11 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
         PyObjectPtr argsptr;
         if( member->has_observers() )
         {
+            printf("SlotHandler for ");
+            PyObject_Print(member->name, stdout, Py_PRINT_RAW);
+            printf(" of ");
+            PyObject_Print(pyobject_cast( atom ), stdout, Py_PRINT_RAW);
+            printf(": Calling static notifiers\n");
             if( valid_old && oldptr.richcompare( newptr, Py_EQ ) )
                 return 0;
             if( valid_old )
@@ -138,6 +149,8 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
             if( !member->notify( atom, argsptr.get(), 0 ) ){
                 printf("SetAttr.SlotHandler ");
                 PyObject_Print(member->name, stdout, Py_PRINT_RAW);
+                printf(" of ");
+                PyObject_Print(pyobject_cast( atom ), stdout, Py_PRINT_RAW);
                 printf(" : Fail at notify (because of static)");
                 if( PyErr_Occurred() ){
                     printf(": Python exception set\n");
@@ -150,6 +163,11 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
         }
         if( atom->has_observers( member->name ) )
         {
+            printf("SlotHandler for ");
+            PyObject_Print(member->name, stdout, Py_PRINT_RAW);
+            printf(" of ");
+            PyObject_Print(pyobject_cast( atom ), stdout, Py_PRINT_RAW);
+            printf(": Calling dynamic notifiers\n");
             if( !argsptr )
             {
                 if( valid_old && oldptr.richcompare( newptr, Py_EQ ) )
@@ -164,6 +182,8 @@ slot_handler( Member* member, CAtom* atom, PyObject* value )
             if( !atom->notify( member->name, argsptr.get(), 0 ) ){
                 printf("SetAttr.SlotHandler ");
                 PyObject_Print(member->name, stdout, Py_PRINT_RAW);
+                printf(" of ");
+                PyObject_Print(pyobject_cast( atom ), stdout, Py_PRINT_RAW);
                 printf(" : Fail at notify (because of dynamic)");
                 if( PyErr_Occurred() ){
                     printf(": Python exception set\n");

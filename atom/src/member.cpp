@@ -749,6 +749,11 @@ Member__set__( Member* self, PyObject* object, PyObject* value )
 {
     printf("Setting member ");
     PyObject_Print(self->name, stdout, Py_PRINT_RAW);
+    printf(" of ");
+    PyObject_Print(object, stdout, Py_PRINT_RAW);
+    printf(" with mode ");
+    PyObject* py_enum( EnumTypes::to_py_enum( self->get_setattr_mode() ) );
+    PyObject_Print(py_enum, stdout, Py_PRINT_RAW);
     printf("\n");
     if( !CAtom::TypeCheck( object ) )
     {
@@ -1068,6 +1073,13 @@ Member::notify( CAtom* atom, PyObject* args, PyObject* kwargs )
         PyObjectPtr callable;
         std::vector<PyObjectPtr>::iterator it;
         std::vector<PyObjectPtr>::iterator end = static_observers->end();
+
+        printf("Member ");
+        PyObject_Print(this->name, stdout, Py_PRINT_RAW);
+        printf(" of ");
+        PyObject_Print(pyobject_cast( atom ), stdout, Py_PRINT_RAW);
+        printf(": Calling static notifiers\n");
+
         for( it = static_observers->begin(); it != end; ++it )
         {
             if( Py23Str_CheckExact( it->get() ) )

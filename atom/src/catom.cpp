@@ -13,6 +13,7 @@
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 #endif
 
+#include <cstdio>
 #include <map>
 #include "atomref.h"
 #include "catom.h"
@@ -492,9 +493,14 @@ CAtom::notify( PyObject* topic, PyObject* args, PyObject* kwargs )
         PyObjectPtr topicptr( newref( topic ) );
         PyObjectPtr argsptr( newref( args ) );
         PyObjectPtr kwargsptr( xnewref( kwargs ) );
+        printf("CAtom ");
+        PyObject_Print(pyobject_cast( this ), stdout, Py_PRINT_RAW);
+        printf(": Calling dynamic notifiers\n");
         int resp = observers->notify( topicptr, argsptr, kwargsptr );
         if( !resp ){
-            printf("CAtom: Fail at dynamic notifier");
+            printf("CAtom ");
+            PyObject_Print(pyobject_cast( this ), stdout, Py_PRINT_RAW);
+            printf(": Fail at dynamic notifier");
             if( PyErr_Occurred() ){
                 printf(": Python exception set\n");
             }
