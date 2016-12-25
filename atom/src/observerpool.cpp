@@ -99,6 +99,7 @@ ObserverPool::add( PyObjectPtr& topic, PyObjectPtr& observer )
         m_modify_guard->add_task( task );
         return;
     }
+    printf("Adding observer\n");
     uint32_t obs_offset = 0;
     std::vector<Topic>::iterator topic_it;
     std::vector<Topic>::iterator topic_end = m_topics.end();
@@ -114,18 +115,27 @@ ObserverPool::add( PyObjectPtr& topic, PyObjectPtr& observer )
             obs_free = obs_end;
             for( ; obs_it != obs_end; ++obs_it )
             {
-                if( *obs_it == observer || obs_it->richcompare( observer, Py_EQ ) )
+                if( *obs_it == observer || obs_it->richcompare( observer, Py_EQ ) ){
+                    printf("Observer already present.\n");
                     return;
+                }
                 if( !obs_it->is_true() )
                     obs_free = obs_it;
             }
             if( obs_free == obs_end )
             {
+                printf("No free observers");
                 m_observers.insert( obs_end, observer );
                 ++topic_it->m_count;
             }
             else
                 *obs_free = observer;
+            if( PyErr_Occurred() ){
+                printf("Adding observer: Python exception set\n");
+            }
+            else{
+                 printf("Adding observer: Python exception not set\n");
+            }
             return;
         }
         obs_offset += topic_it->m_count;
@@ -143,6 +153,13 @@ ObserverPool::remove( PyObjectPtr& topic, PyObjectPtr& observer )
         ModifyTask* task = new RemoveTask( *this, topic, observer );
         m_modify_guard->add_task( task );
         return;
+    }
+    printf("Removing observer");
+    if( PyErr_Occurred() ){
+        printf(": Python exception set\n");
+    }
+    else{
+         printf(": Python exception not set\n");
     }
     uint32_t obs_offset = 0;
     std::vector<Topic>::iterator topic_it;
@@ -162,6 +179,13 @@ ObserverPool::remove( PyObjectPtr& topic, PyObjectPtr& observer )
                     m_observers.erase( obs_it );
                     if( ( --topic_it->m_count ) == 0 )
                         m_topics.erase( topic_it );
+                    printf("Observer removed");
+                    if( PyErr_Occurred() ){
+                        printf(": Python exception set\n");
+                    }
+                    else{
+                         printf(": Python exception not set\n");
+                    }
                     return;
                 }
             }
@@ -181,6 +205,13 @@ ObserverPool::remove( PyObjectPtr& topic )
         m_modify_guard->add_task( task );
         return;
     }
+    printf("Removing observer");
+    if( PyErr_Occurred() ){
+        printf(": Python exception set\n");
+    }
+    else{
+         printf(": Python exception not set\n");
+    }
     uint32_t obs_offset = 0;
     std::vector<Topic>::iterator topic_it;
     std::vector<Topic>::iterator topic_end = m_topics.end();
@@ -193,6 +224,13 @@ ObserverPool::remove( PyObjectPtr& topic )
                 m_observers.begin() + (obs_offset + topic_it->m_count)
             );
             m_topics.erase( topic_it );
+            printf("Observer removed");
+            if( PyErr_Occurred() ){
+                printf(": Python exception set\n");
+            }
+            else{
+                 printf(": Python exception not set\n");
+            }
             return;
         }
         obs_offset += topic_it->m_count;
@@ -227,12 +265,20 @@ ObserverPool::notify( PyObjectPtr& topic, PyObjectPtr& args, PyObjectPtr& kwargs
                         else{
                              printf(": Python exception not set\n");
                         }
+//                        delete &guard;
+//                        if( PyErr_Occurred() ){
+//                            printf("ObserverPool.notify guard destroyed: Python exception set\n");
+//                        }
+//                        else{
+//                             printf("ObserverPool.notify guard destroyed: Python exception not set\n");
+//                        }
 
                         return false;
                         }
                 }
                 else
                 {
+                    printf("Scheduling removal of observer\n");
                     ModifyTask* task = new RemoveTask( *this, topic, *obs_it );
                     m_modify_guard->add_task( task );
                 }

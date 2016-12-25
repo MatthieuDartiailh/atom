@@ -30,6 +30,7 @@ public:
 
     ~ModifyGuard()
     {
+        printf("Deleting guard\n");
         if( m_owner.get_modify_guard() == this )
         {
             m_owner.set_modify_guard( 0 );
@@ -37,9 +38,16 @@ public:
             std::vector<ModifyTask*>::iterator end = m_tasks.end();
             for( it = m_tasks.begin(); it != end; ++it )
             {
+                printf("running task\n");
                 ( *it )->run();
                 delete *it;
             }
+        }
+        if( PyErr_Occurred() ){
+            printf("Deleting guard: Python exception set\n");
+        }
+        else{
+             printf("Deleting guard: Python exception not set\n");
         }
     }
 
