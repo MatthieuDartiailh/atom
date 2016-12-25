@@ -6,7 +6,7 @@
 | The full license is in the file COPYING.txt, distributed with this software.
 |----------------------------------------------------------------------------*/
 #pragma once
-
+#include <Python.h>
 
 struct ModifyTask
 {
@@ -30,6 +30,12 @@ public:
 
     ~ModifyGuard()
     {
+        bool exception_set = false;
+        PyObject *type, *value, *traceback;
+        if( PyErr_Occurred() ){
+            PyErr_Fetch(&type, &value, &traceback);
+            exception_set = true;
+        }
         if( m_owner.get_modify_guard() == this )
         {
             m_owner.set_modify_guard( 0 );
@@ -41,6 +47,8 @@ public:
                 delete *it;
             }
         }
+        if( exception_set )
+            PyErr_Restore(type, value, traceback);
     }
 
     void add_task( ModifyTask* task ) { m_tasks.push_back( task ); }

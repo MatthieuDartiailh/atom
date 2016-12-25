@@ -131,7 +131,7 @@ AtomRef_sizeof( AtomRef* self, PyObject* args )
 
 
 static int
-AtomRef__nonzero__( AtomRef* self )
+AtomRef__bool__( AtomRef* self )
 {
     return self->pointer.is_null() ? 0 : 1;
 }
@@ -150,7 +150,7 @@ PyNumberMethods AtomRef_as_number = {
      ( unaryfunc )0,                        /* nb_negative */
      ( unaryfunc )0,                        /* nb_positive */
      ( unaryfunc )0,                        /* nb_absolute */
-     ( inquiry )AtomRef__nonzero__          /* nb_nonzero, or nb_bool in python3 */
+     ( inquiry )AtomRef__bool__          /* nb_nonzero, or nb_bool in python3 */
 };
 
 

@@ -567,7 +567,9 @@ _STATIC_STRING( operation )
 _STATIC_STRING( item )
 _STATIC_STRING( items )
 _STATIC_STRING( index )
+#if PY_MAJOR_VERSION < 3
 _STATIC_STRING( cmp )
+#endif
 _STATIC_STRING( key )
 _STATIC_STRING( reverse )
 _STATIC_STRING( container )
@@ -764,10 +766,10 @@ public:
                 return 0;
             if( !c.set_item( PySStr::operation(), PySStr::sort() ) )
                 return 0;
-            PyObject* cmp = Py_None;
             PyObject* key = Py_None;
             int rev = 0;
 #if PY_MAJOR_VERSION < 3
+            PyObject* cmp = Py_None;
             if( !PyArg_ParseTupleAndKeywords(
                 args, kwargs, "|OOi", kwlist, &cmp, &key, &rev ) )
                 return 0;
