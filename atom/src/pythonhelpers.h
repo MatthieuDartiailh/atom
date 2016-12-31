@@ -247,7 +247,6 @@ public:
     bool is_true( bool clear_err=true ) const
     {
         printf("Testing truth value");
-        PyErr_Clear();
         int truth = PyObject_IsTrue( m_pyobj );
         printf(": %d\n", truth);
         if( truth == 1 )
