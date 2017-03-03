@@ -1,6 +1,10 @@
 Atom Release Notes
 ==================
 
+0.4.0.dev - 01/03/2017
+----------------------
+- Add support for Python 3 (>=3.4)
+
 0.3.10 - 10/28/2014
 -------------------
 - Fix a bug in resolution of Forward* members. _92244cf1e75_
