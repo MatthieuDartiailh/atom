@@ -13,7 +13,6 @@ if sys.version_info >= (3,):
 else:
     import copy_reg as copyreg
 
-from future.builtins import int
 from future.utils import with_metaclass
 from past.builtins import basestring
 
