@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Copyright (c) 2013, Nucleic Development Team.
+# Copyright (c) 2013-2017, Nucleic Development Team.
 #
 # Distributed under the terms of the Modified BSD License.
 #
@@ -364,6 +364,7 @@ class TestContainerList(TestStandardList):
     def test_list_types(self):
         eq_(type(self.model.untyped), atomclist)
         eq_(type(self.model.typed), atomclist)
+
 
 def containertest(func):
     @wraps(func)
