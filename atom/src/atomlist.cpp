@@ -204,37 +204,20 @@ public:
         return PyList_Type.tp_as_sequence->sq_ass_item(
             m_list.get(), index, item.get() );
     }
-
+// This signature is used only in tp_ass_slice which exists only on Python 2
+#if PY_MAJOR_VERSION < 3
     int setitem( Py_ssize_t low, Py_ssize_t high, PyObject* value )
     {
-        #if PY_MAJOR_VERSION >= 3
-            //if ( !value )
-            //    return PyList_Type.tp_as_mapping->mp_
-            // TODO - !value check here
-            int i, size = PySequence_Size( value );
-            if (size < 0)
-                return -1;
-            for ( i=0; i<size; i++ )
-            {
-                int loc = i + (int)low;
-                PyObject * obj = PySequence_GetItem( value, i );
-                PyObjectPtr item( validate_single( obj ) );
-                PyList_Type.tp_as_sequence->sq_ass_item(
-                    m_list.get(), loc, item.get());
-                Py_DECREF( obj );
-            }
-            return 1;
-        #else
-            if( !value )
-                return PyList_Type.tp_as_sequence->sq_ass_slice(
-                    m_list.get(), low, high, value );
-            PyObjectPtr item( validate_sequence( value ) );
-            if( !item )
-                return -1;
+        if( !value )
             return PyList_Type.tp_as_sequence->sq_ass_slice(
-                m_list.get(), low, high, item.get() );
-        #endif
+                m_list.get(), low, high, value );
+        PyObjectPtr item( validate_sequence( value ) );
+        if( !item )
+            return -1;
+        return PyList_Type.tp_as_sequence->sq_ass_slice(
+            m_list.get(), low, high, item.get() );
     }
+#endif
 
     int setitem( PyObject* key, PyObject* value )
     {
