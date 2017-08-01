@@ -9,9 +9,9 @@ from __future__ import (division, print_function, absolute_import)
 
 import sys
 if sys.version_info >= (3,):
-    import copyreg as copy_reg
+    import copyreg
 else:
-    import copy_reg
+    import copy_reg as copyreg
 from contextlib import contextmanager
 
 from types import FunctionType
@@ -474,7 +474,7 @@ class Atom(with_metaclass(AtomMeta, CAtom)):
         """
         state = {}
         state.update(getattr(self, '__dict__', {}))
-        slots = copy_reg._slotnames(type(self))
+        slots = copyreg._slotnames(type(self))
         if slots:
             for name in slots:
                 state[name] = getattr(self, name)

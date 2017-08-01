@@ -9,9 +9,9 @@ from __future__ import (division, print_function, absolute_import)
 
 import sys
 if sys.version_info >= (3,):
-    from collections import MutableMapping as DictMixin
+    from collections import MutableMapping
 else:
-    from UserDict import DictMixin
+    from UserDict import DictMixin as MutableMapping
 
 from .catom import Member, PostGetAttr, DefaultValue, Validate
 from .instance import Instance
@@ -96,7 +96,7 @@ class Dict(Member):
             value.set_index(index)
 
 
-class _DictProxy(DictMixin):
+class _DictProxy(MutableMapping):
     """ A private proxy object which validates dict modifications.
 
     Instances of this class should not be created by user code.

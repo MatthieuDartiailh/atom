@@ -11,9 +11,9 @@ from __future__ import (division, print_function, absolute_import)
 
 import sys
 if sys.version_info >= (3,):
-    import copyreg as copy_reg
+    import copyreg
 else:
-    import copy_reg
+    import copy_reg as copyreg
 
 from future.builtins import int as il
 from future.utils import with_metaclass
@@ -27,8 +27,10 @@ IntEnum = None
 def _invalid_op(op):
     msg = " is an invalid operation for %s"
     msg = ("'%s'" % op) + msg
+
     def closure(self, *args):
         raise TypeError(msg % self)
+
     return closure
 
 
@@ -176,7 +178,7 @@ class _IntEnumMeta(type):
         flags_class = type(name, (cls.IntEnumFlags,), {})
         flags_class.__enum_class__ = cls
         cls.__flags_class__ = flags_class
-        copy_reg.pickle(flags_class, _int_enum_flags_pickler)
+        copyreg.pickle(flags_class, _int_enum_flags_pickler)
         return flags_class
 
 
