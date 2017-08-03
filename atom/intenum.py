@@ -7,15 +7,13 @@
 #------------------------------------------------------------------------------
 # Note: This module is imported by 'atom.catom' module from code defined in
 # the 'enumtypes.cpp' file. This module must therefore not import atom.
-from __future__ import (division, print_function, absolute_import)
-
 import sys
 if sys.version_info >= (3,):
     import copyreg
 else:
     import copy_reg as copyreg
 
-from future.builtins import int as il
+from future.builtins import int
 from future.utils import with_metaclass
 from past.builtins import basestring
 
@@ -140,7 +138,7 @@ class _IntEnumMeta(type):
 
     def __call__(cls, which):
         enum = None
-        if isinstance(which, il):
+        if isinstance(which, int):
             enum = cls.__reved__.get(which)
         elif isinstance(which, basestring):
             enum = cls.__enums__.get(which)

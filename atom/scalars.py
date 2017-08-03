@@ -5,7 +5,7 @@
 #
 # The full license is in the file COPYING.txt, distributed with this software.
 #------------------------------------------------------------------------------
-from __future__ import (division, print_function, absolute_import)
+from future.builtins import int as long
 
 from .catom import Member, DefaultValue, Validate, SetAttr
 
@@ -113,7 +113,7 @@ class Long(Value):
     """
     __slots__ = ()
 
-    def __init__(self, default=0, factory=None, strict=False):
+    def __init__(self, default=long(0), factory=None, strict=False):
         super(Long, self).__init__(default, factory)
         if strict:
             self.set_validate_mode(Validate.Long, None)
@@ -181,6 +181,9 @@ class Float(Value):
 class Bytes(Value):
     """ A value of type `bytes`.
 
+    By default, unicode strings will be promoted to byte strings. Pass
+    strict=True to the constructor to enable strict byte sting checking.
+
     """
     __slots__ = ()
 
@@ -197,8 +200,8 @@ class Str(Value):
 
     Under Python 2 this is a byte string, under Python 3 a unicode one.
 
-    The use of this member is discouraged as Bytes and Unicode provide a more
-    homogeneous behavior.
+    The use of this member is discouraged in Python 2/3 compatible codebase
+    as Bytes and Unicode provide a more homogeneous behavior.
 
     """
     def __init__(self, default='', factory=None, strict=False):
@@ -218,7 +221,7 @@ class Unicode(Value):
     """
     __slots__ = ()
 
-    def __init__(self, default='', factory=None, strict=False):
+    def __init__(self, default=u'', factory=None, strict=False):
         super(Unicode, self).__init__(default, factory)
         if strict:
             self.set_validate_mode(Validate.Unicode, None)

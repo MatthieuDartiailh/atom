@@ -277,6 +277,10 @@ SortedMap_new( PyTypeObject* type, PyObject* args, PyObject* kwargs )
     return self;
 }
 
+// Clearing the vector may cause arbitrary side effects on item
+// decref, including calls into methods which mutate the vector.
+// To avoid segfaults, first make the vector empty, then let the
+// destructors run for the old items.
 #if PY_MAJOR_VERSION >= 3
     static int
     SortedMap_clear( SortedMap* self )
@@ -289,10 +293,6 @@ SortedMap_new( PyTypeObject* type, PyObject* args, PyObject* kwargs )
     static void
     SortedMap_clear( SortedMap* self )
     {
-        // Clearing the vector may cause arbitrary side effects on item
-        // decref, including calls into methods which mutate the vector.
-        // To avoid segfaults, first make the vector empty, then let the
-        // destructors run for the old items.
         SortedMap::Items empty;
         self->m_items->swap( empty );
     }

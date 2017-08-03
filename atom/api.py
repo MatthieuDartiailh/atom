@@ -5,9 +5,6 @@
 #
 # The full license is in the file COPYING.txt, distributed with this software.
 #------------------------------------------------------------------------------
-from __future__ import (division, unicode_literals, print_function,
-                        absolute_import)
-
 from .atom import AtomMeta, Atom, observe, set_default
 from .catom import (
     CAtom, Member, GetAttr, SetAttr, PostGetAttr, PostSetAttr,
