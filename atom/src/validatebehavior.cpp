@@ -233,13 +233,18 @@ int_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* 
 }
 #endif
 
+#if PY_MAJOR_VERSION >= 3
+    #define LONG_NAME "int"
+#else
+    #define LONG_NAME "long"
+#endif
 
 static PyObject*
 long_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject* newvalue )
 {
     if( PyLong_Check( newvalue ) )
         return newref( newvalue );
-    return validate_type_fail( member, atom, newvalue, "long" );
+    return validate_type_fail( member, atom, newvalue, LONG_NAME );
 }
 
 
@@ -256,7 +261,8 @@ long_promote_handler( Member* member, CAtom* atom, PyObject* oldvalue, PyObject*
     if( PyFloat_Check( newvalue ) ) {
         double value = PyFloat_AS_DOUBLE( newvalue );
         return PyLong_FromDouble( value );
-    return validate_type_fail( member, atom, newvalue, "long" );
+    }
+    return validate_type_fail( member, atom, newvalue, LONG_NAME );
 }
 
 

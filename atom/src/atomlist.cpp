@@ -840,6 +840,8 @@ public:
         return res;
     }
 
+// This signature is used only in tp_ass_slice which exists only on Python 2
+#if PY_MAJOR_VERSION < 3
     int setitem( Py_ssize_t low, Py_ssize_t high, PyObject* value )
     {
         PyObjectPtr olditem;
@@ -862,6 +864,7 @@ public:
         }
         return res;
     }
+#endif
 
     int setitem( PyObject* key, PyObject* value )
     {

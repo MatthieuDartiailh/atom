@@ -198,7 +198,9 @@ class Bytes(Value):
 class Str(Value):
     """A value of type `str`.
 
-    Under Python 2 this is a byte string, under Python 3 a unicode one.
+    Under Python 2 this is a byte string and behaves as Bytes with respect to
+    promotion, under Python 3 it is a unicode string and behaves as Unicode
+    with respect to promotion.
 
     The use of this member is discouraged in Python 2/3 compatible codebase
     as Bytes and Unicode provide a more homogeneous behavior.

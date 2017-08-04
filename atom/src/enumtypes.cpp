@@ -33,7 +33,7 @@ namespace {
 template<typename T> inline bool
 add_long( PyDictPtr& dict_ptr, const char* name, T value )
 {
-    PyObjectPtr pyint( Py23Int_FromLong( static_cast<long>( value ) ) );
+    PyObjectPtr pyint( PyLong_FromLong( static_cast<long>( value ) ) );
     if( !pyint )
         return false;
     if( !dict_ptr.set_item( name, pyint ) )

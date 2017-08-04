@@ -743,7 +743,7 @@ public:
 
     PyObjectPtr get_class() const
     {
-        return PyObjectPtr( PythonHelpers::xnewref( PyMethod_GET_CLASS( m_pyobj ) ) ) );
+        return PyObjectPtr( PythonHelpers::xnewref( PyMethod_GET_CLASS( m_pyobj ) ) );
     }
 
 };
