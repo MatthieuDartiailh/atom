@@ -134,7 +134,7 @@ class _DictProxy(MutableMapping):
         return key in self._data
 
     def keys(self):
-        return list(self._data.keys())
+        return self._data.keys()
 
     def copy(self):
         return self._data.copy()
